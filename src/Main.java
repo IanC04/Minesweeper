@@ -3,5 +3,6 @@ public class Main {
         System.out.println("Starting Game");
         GameManager game = new GameManager();
         game.createBoard();
+        System.out.println(game.printBoard());
     }
 }
