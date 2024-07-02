@@ -20,13 +20,13 @@ ext {
 sourceCompatibility = '21'
 targetCompatibility = '21'
 
-tasks.withType(JavaCompile) {
+tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8'
 }
 
 application {
     mainModule = 'game.minesweeper'
-    mainClass = 'game.minesweeper.HelloApplication'
+    mainClass = 'game.minesweeper.Application'
 }
 
 javafx {

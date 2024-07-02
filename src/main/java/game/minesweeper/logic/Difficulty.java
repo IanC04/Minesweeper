@@ -6,12 +6,26 @@
 package game.minesweeper.logic;
 
 public enum Difficulty {
-    EASY(20, 10), MEDIUM(30, 15), HARD(50, 20), INSANE(50, 40);
+    BABY(5, 15), EASY(10, 20), MEDIUM(15, 25), HARD(20, 30), INSANE(25, 35);
 
-    final int dimensions, mineRateOutOf100;
+    private final int dimensions, mineRateOutOf100;
 
     Difficulty(int d, int p) {
         this.dimensions = d;
         this.mineRateOutOf100 = p;
+    }
+
+    public int getDimensions() {
+        return dimensions;
+    }
+
+    public int getMineRateOutOf100() {
+        return mineRateOutOf100;
+    }
+
+    @Override
+    public String toString() {
+        final String allCaps = super.toString();
+        return allCaps.substring(0, 1).toUpperCase() + allCaps.substring(1).toLowerCase();
     }
 }

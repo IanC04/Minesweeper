@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx/17.0.2-ea"
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="game.minesweeper.AppController"
+            stylesheets="@app-style.css">
+    <top>
+        <ToolBar>
+            <Button onAction="#openRepository" text="View Repo"/>
+            <Pane HBox.hgrow="ALWAYS"/>
+            <Label fx:id="timer" visible="false" text="5:00"/>
+            <Pane HBox.hgrow="ALWAYS"/>
+            <ToggleButton fx:id="timer_control" text="Timer"/>
+            <Button text="Settings"/>
+        </ToolBar>
+    </top>
+    <center>
+        <StackPane fx:id="panes"/>
+    </center>
+    <bottom>
+        <HBox>
+            <Button text="Back" onAction="#loadWelcomePane"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Button alignment="CENTER_RIGHT" onAction="#exit" text="Exit"/>
+        </HBox>
+    </bottom>
+    <padding>
+        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
+    </padding>
+</BorderPane>

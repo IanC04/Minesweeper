@@ -5,5 +5,8 @@
 
 package game.minesweeper.logic;
 
-public class MoveCommand {
+record MoveCommand(int r, int c, MoveType moveType) {
+    enum MoveType {
+        FLAG, CLICK
+    }
 }

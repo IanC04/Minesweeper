@@ -7,29 +7,86 @@ package game.minesweeper.logic;
 
 import java.util.Random;
 
-public class Board {
+class Board {
+    private static final byte MINE = -1;
+
     private final byte[][] grid;
+    private final Difficulty difficulty;
+    private final int mineCount;
 
-    private final byte MINE = -1;
-    Difficulty difficulty;
-
-    public Board(Difficulty d) {
+    /**
+     * @implNote Testing only
+     * @param d
+     */
+    Board(Difficulty d) {
+        grid = new byte[d.getDimensions()][d.getDimensions()];
         difficulty = d;
-        grid = new byte[d.dimensions][d.dimensions];
 
-        generateMines();
+        Random r = new Random();
+        mineCount = generateMines(r.nextInt(d.getDimensions()), r.nextInt(d.getDimensions()));
         setNumbers();
     }
 
-    private void generateMines() {
+    Board(Difficulty d, int rowSelected, int colSelected) {
+        grid = new byte[d.getDimensions()][d.getDimensions()];
+        difficulty = d;
+
+        mineCount = generateMines(rowSelected, colSelected);
+        setNumbers();
+    }
+
+    byte getCell(int r, int c) {
+        if (!inBounds(r, c)) {
+            throw new IllegalArgumentException("Parameters not in bounds");
+        }
+
+        return grid[r][c];
+    }
+
+    boolean isMine(int row, int col) {
+        return getCell(row, col) == MINE;
+    }
+
+    boolean isNumber(int row, int col) {
+        return getCell(row, col) > 0;
+    }
+
+    int getSize() {
+        return difficulty.getDimensions() * difficulty.getDimensions();
+    }
+
+    int getMineCount() {
+        return mineCount;
+    }
+
+    boolean inBounds(int row, int col) {
+        return (row >= 0 && row < grid.length) && (col >= 0 && col < grid.length);
+    }
+
+    /**
+     * @return the underlying grid
+     * @apiNote returned grid is modifiable
+     */
+    byte[][] getUnderlyingGrid() {
+        return grid;
+    }
+
+    private int generateMines(int rowSeed, int colSeed) {
+        int mineCount = 0;
         Random r = new Random();
         for (int i = 0; i < grid.length; i++) {
             for (int j = 0; j < grid.length; j++) {
-                if (r.nextInt(100) < difficulty.mineRateOutOf100) {
+                if (Math.abs(rowSeed - i) <= 1 && Math.abs(colSeed - j) <= 1) {
+                    continue;
+                }
+                if (r.nextInt(100) < difficulty.getMineRateOutOf100()) {
                     grid[i][j] = MINE;
+                    mineCount++;
                 }
             }
         }
+
+        return mineCount;
     }
 
     private void setNumbers() {
@@ -54,22 +111,7 @@ public class Board {
         return sum;
     }
 
-    private boolean isMine(int row, int col) {
-        return grid[row][col] == MINE;
-    }
-
-    private boolean inBounds(int row, int col) {
-        return (row >= 0 && row < grid.length) && (col >= 0 && col < grid.length);
-    }
-
-    public byte getCell(int r, int c) {
-        if (!inBounds(r, c)) {
-            throw new IllegalArgumentException("Parameters not in bounds");
-        }
-
-        return grid[r][c];
-    }
-
+    @Override
     public String toString() {
         StringBuilder output = new StringBuilder();
         for (byte[] line : grid) {

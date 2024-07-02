@@ -4,5 +4,6 @@ module game.minesweeper {
 
 
     opens game.minesweeper to javafx.fxml;
+    exports game.minesweeper.logic;
     exports game.minesweeper;
 }
