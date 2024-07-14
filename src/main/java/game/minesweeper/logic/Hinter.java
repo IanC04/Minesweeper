@@ -3,8 +3,8 @@
     GitHub: https://github.com/IanC04
  */
 
-package game.minesweeper.bot;
+package game.minesweeper.logic;
 
-public class MinesweeperSolver {
+public class Hinter {
     // TODO
 }

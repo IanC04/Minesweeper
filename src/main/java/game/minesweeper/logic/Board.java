@@ -7,25 +7,12 @@ package game.minesweeper.logic;
 
 import java.util.Random;
 
-class Board {
+final class Board {
     private static final byte MINE = -1;
 
     private final byte[][] grid;
     private final Difficulty difficulty;
     private final int mineCount;
-
-    /**
-     * @implNote Testing only
-     * @param d
-     */
-    Board(Difficulty d) {
-        grid = new byte[d.getDimensions()][d.getDimensions()];
-        difficulty = d;
-
-        Random r = new Random();
-        mineCount = generateMines(r.nextInt(d.getDimensions()), r.nextInt(d.getDimensions()));
-        setNumbers();
-    }
 
     Board(Difficulty d, int rowSelected, int colSelected) {
         grid = new byte[d.getDimensions()][d.getDimensions()];
@@ -114,11 +101,12 @@ class Board {
     @Override
     public String toString() {
         StringBuilder output = new StringBuilder();
+
         for (byte[] line : grid) {
             for (byte b : line) {
                 output.append(String.format("%4s", (b == MINE ? "*" : b)));
             }
-            output.append("\n");
+            output.append('\n');
         }
         return output.toString();
     }

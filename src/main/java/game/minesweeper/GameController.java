@@ -8,7 +8,6 @@ package game.minesweeper;
 import game.minesweeper.logic.Difficulty;
 import game.minesweeper.logic.GameManager;
 import javafx.fxml.FXML;
-import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -18,10 +17,11 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
 import java.text.MessageFormat;
+import java.util.List;
 
-public class GameController {
+public final class GameController {
     @FXML
-    private Label game_info;
+    private Label gameInfo;
     @FXML
     private GridPane boardPane;
 
@@ -33,24 +33,30 @@ public class GameController {
         gameManager = new GameManager().newGame(difficulty);
     }
 
-    public void initialize() {
-        game_info.setText(MessageFormat.format("{0} Mode", difficulty.toString()));
+    @FXML
+    private void initialize() {
+        gameInfo.setText(MessageFormat.format(Messages.getMessage(Messages.MODE), difficulty.toString()));
 
         for (int r = 0; r < difficulty.getDimensions(); r++) {
             for (int c = 0; c < difficulty.getDimensions(); c++) {
-                final Rectangle tile = new Rectangle(25, 25);
-                tile.setFill(Color.BURLYWOOD);
-                tile.setStroke(Color.BLACK);
-                tile.setArcWidth(5);
-                tile.setArcHeight(5);
-                final int finalR = r, finalC = c;
-                tile.setOnMouseClicked(event -> clickTile(event, finalR, finalC));
+                final Rectangle rectangle = new Rectangle(25, 25);
+                rectangle.setMouseTransparent(true);
+                rectangle.setFill(Color.BURLYWOOD);
+                rectangle.setStroke(Color.BLACK);
+                rectangle.setArcWidth(5);
+                rectangle.setArcHeight(5);
+
                 final ImageView imageView = new ImageView();
                 imageView.setMouseTransparent(true);
                 imageView.setFitWidth(25);
                 imageView.setFitHeight(25);
                 imageView.imageProperty().bind(gameManager.createDisplayBinding(r, c));
-                boardPane.add(new StackPane(tile, imageView), r, c);
+
+                final StackPane tile = new StackPane(rectangle, imageView);
+                final int finalR = r, finalC = c;
+                tile.setOnMouseClicked(event -> clickTile(event, finalR, finalC));
+                // GridPane is column then row index
+                boardPane.add(tile, c, r);
             }
         }
     }
@@ -58,11 +64,27 @@ public class GameController {
     void clickTile(MouseEvent event, int r, int c) {
         switch (event.getButton()) {
             case PRIMARY -> {
-                gameManager.move(r, c);
-                Node target = (Node) event.getTarget();
-                target.setMouseTransparent(true);
+                List<GameManager.Cell> cellsTurnedShown = gameManager.move(r, c);
+                cellsTurnedShown.forEach(cell -> boardPane.getChildrenUnmodifiable().get(
+                        cell.r() * difficulty.getDimensions() + cell.c()).setMouseTransparent(true));
             }
             case SECONDARY -> gameManager.flag(r, c);
+        }
+
+        if (gameManager.gameOver()) {
+            boardPane.setMouseTransparent(true);
+            if (gameManager.gameWon()) {
+                gameInfo.setText(Messages.getMessage(Messages.GAME_OVER_WIN));
+            } else {
+                gameInfo.setText(Messages.getMessage(Messages.GAME_OVER_LOST));
+            }
+        } else {
+            if (gameManager.wasFirstClick()) {
+                gameInfo.setText(Messages.getMessage(Messages.START));
+            } else {
+                gameInfo.setText(MessageFormat.format(Messages.getMessage(Messages.CONTINUE),
+                        gameManager.getClickCount()));
+            }
         }
     }
 }

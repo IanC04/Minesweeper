@@ -7,6 +7,6 @@ package game.minesweeper.logic;
 
 record MoveCommand(int r, int c, MoveType moveType) {
     enum MoveType {
-        FLAG, CLICK
+        FLAG, SELECT
     }
 }

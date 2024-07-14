@@ -19,13 +19,14 @@ import javafx.scene.layout.StackPane;
 import java.io.IOException;
 import java.util.Objects;
 
-public class WelcomeController {
+public final class WelcomeController {
     @FXML
     private HBox modes;
     @FXML
-    private Label welcome_info;
+    private Label welcomeInfo;
 
-    public void initialize() {
+    @FXML
+    private void initialize() {
         for (Difficulty d : Difficulty.values()) {
             Button b = new Button(d.toString());
             b.setOnAction(event -> onStartButtonClick(event, d));
@@ -34,12 +35,12 @@ public class WelcomeController {
     }
 
     @FXML
-    protected void onStartButtonClick(ActionEvent event, Difficulty difficulty) {
-        welcome_info.setText("Welcome to Minesweeper!");
+    private void onStartButtonClick(ActionEvent event, Difficulty difficulty) {
+        welcomeInfo.setText("Welcome to Minesweeper!");
         try {
             changePaneToBoard(event, difficulty);
         } catch (IOException exception) {
-            welcome_info.setText("Unable to load game!");
+            welcomeInfo.setText("Unable to load game!");
         }
     }
 

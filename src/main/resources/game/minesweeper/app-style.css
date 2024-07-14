@@ -12,3 +12,11 @@
     -fx-background-color: green;
 }
 */
+
+#timerControl {
+    -fx-background-color: #cc0000;
+}
+
+#timerControl:selected {
+    -fx-background-color: forestgreen;
+}

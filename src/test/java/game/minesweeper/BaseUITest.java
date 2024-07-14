@@ -8,11 +8,11 @@ package game.minesweeper;
 import javafx.application.Platform;
 import javafx.scene.robot.Robot;
 
-public class BaseTest {
+public class BaseUITest {
 
     Robot robot;
 
-    public BaseTest() {
+    public BaseUITest() {
         Platform.startup(() -> robot = new Robot());
     }
 }

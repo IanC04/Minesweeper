@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.VBox?>
 <VBox xmlns:fx="http://javafx.com/fxml"
       fx:controller="game.minesweeper.WelcomeController" alignment="CENTER">
-    <Label fx:id="welcome_info" alignment="TOP_CENTER" text="Choose a difficulty"/>
+    <Label fx:id="welcomeInfo" alignment="TOP_CENTER" text="Choose a difficulty"/>
     <HBox alignment="CENTER" spacing="20.0" fx:id="modes">
     </HBox>
 </VBox>

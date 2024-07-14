@@ -18,11 +18,11 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.util.Objects;
 
-public class AppController {
+public final class AppController {
     @FXML
     private Label timer;
     @FXML
-    private ToggleButton timer_control;
+    private ToggleButton timerControl;
     @FXML
     private StackPane panes;
 
@@ -30,14 +30,27 @@ public class AppController {
         return "#panes";
     }
 
-    public void initialize() throws IOException {
-        timer.visibleProperty().bind(timer_control.selectedProperty());
+    @FXML
+    private void initialize() throws IOException {
+        timer.visibleProperty().bind(timerControl.selectedProperty());
+        timerControl.setText(Messages.getMessage(Messages.TIMER_OFF));
+        timerControl.selectedProperty().addListener((
+                (__, _1, newValue) -> timerControl.setText(
+                        Messages.getMessage(newValue ? Messages.TIMER_ON : Messages.TIMER_OFF))));
         loadWelcomePane();
     }
 
     @FXML
     private void openRepository() throws IOException {
         Runtime.getRuntime().exec(new String[]{"cmd", "/c", "start chrome https://github.com/IanC04/Minesweeper"});
+    }
+
+    @FXML
+    private void getHint() {
+    }
+
+    @FXML
+    private void changeSettings() {
     }
 
     @FXML

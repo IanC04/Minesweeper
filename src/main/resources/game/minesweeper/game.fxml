@@ -7,7 +7,7 @@
 <VBox alignment="CENTER" spacing="20.0"
       xmlns:fx="http://javafx.com/fxml"
       fx:controller="game.minesweeper.GameController">
-    <Label fx:id="game_info" alignment="TOP_CENTER" text="Choose a difficulty"/>
+    <Label fx:id="gameInfo" alignment="TOP_CENTER" text="Choose a difficulty"/>
     <GridPane fx:id="boardPane" alignment="CENTER">
     </GridPane>
 </VBox>
