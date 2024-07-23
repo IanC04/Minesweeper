@@ -129,9 +129,9 @@ final class GameState {
     /**
      * Called when selected cell is not a number, so need to flood fill
      *
-     * @param row
-     * @param col
-     * @return
+     * @param row initial clicked cell row
+     * @param col initial clicked cell column
+     * @return if flood fill performed
      */
     private State floodShow(final int row, final int col) {
         final Queue<GameManager.Cell> cellsToOpen = new LinkedList<>();
@@ -229,7 +229,7 @@ final class GameState {
         for (int i = 0; i < currentBoardState.length; i++) {
             for (int j = 0; j < currentBoardState.length; j++) {
                 Serializable cellData = cellIsShowing(i, j)
-                        ? currentBoard.getCell(i,j) : "";
+                        ? currentBoard.getCell(i, j) : "";
                 cellData = cellIsFlagged(i, j) ? "#" : cellData;
                 output.append(String.format("%4s", cellData));
             }

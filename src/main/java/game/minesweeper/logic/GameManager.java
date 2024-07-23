@@ -22,6 +22,7 @@ public final class GameManager {
     }
 
     private final List<GameState> previousGames;
+
     private GameState currentGame;
     private Map<Cell, ObjectProperty<Image>> display;
 
@@ -101,6 +102,14 @@ public final class GameManager {
 
     public int getClickCount() {
         return currentGame.getClickCount();
+    }
+
+    public Cell getHint() {
+        if (wasFirstClick() || gameOver()) {
+            return null;
+        }
+
+        return Hinter.getHint(currentGame);
     }
 
     private void validateSelection(int r, int c) {

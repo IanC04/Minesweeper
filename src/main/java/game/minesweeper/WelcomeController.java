@@ -47,12 +47,14 @@ public final class WelcomeController {
     private void changePaneToBoard(ActionEvent event, Difficulty difficulty) throws IOException {
         FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(
                 getClass().getResource("game.fxml")));
-        loader.setControllerFactory((c) -> new GameController(difficulty));
+        Button hintButton =
+                (Button) ((Node) event.getSource()).getScene().lookup(AppController.HINT_NAME_FOR_LOOKUP);
+        loader.setControllerFactory((c) -> new GameController(difficulty, hintButton));
         Parent pane = loader.load();
 
-        StackPane parent =
-                (StackPane) ((Node) event.getSource()).getScene().lookup(AppController.getPaneNameForLookup());
-        parent.getChildren().clear();
-        parent.getChildren().add(pane);
+        StackPane stackPane =
+                (StackPane) ((Node) event.getSource()).getScene().lookup(AppController.PANEL_NAME_FOR_LOOKUP);
+        stackPane.getChildren().clear();
+        stackPane.getChildren().add(pane);
     }
 }

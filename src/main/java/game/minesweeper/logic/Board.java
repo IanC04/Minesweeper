@@ -13,12 +13,16 @@ final class Board {
     private final byte[][] grid;
     private final Difficulty difficulty;
     private final int mineCount;
+    private final int initialRow;
+    private final int initialColumn;
 
     Board(Difficulty d, int rowSelected, int colSelected) {
         grid = new byte[d.getDimensions()][d.getDimensions()];
         difficulty = d;
 
         mineCount = generateMines(rowSelected, colSelected);
+        initialRow = rowSelected;
+        initialColumn = colSelected;
         setNumbers();
     }
 
@@ -38,6 +42,10 @@ final class Board {
         return getCell(row, col) > 0;
     }
 
+    int getLength() {
+        return grid.length;
+    }
+
     int getSize() {
         return difficulty.getDimensions() * difficulty.getDimensions();
     }
@@ -48,14 +56,6 @@ final class Board {
 
     boolean inBounds(int row, int col) {
         return (row >= 0 && row < grid.length) && (col >= 0 && col < grid.length);
-    }
-
-    /**
-     * @return the underlying grid
-     * @apiNote returned grid is modifiable
-     */
-    byte[][] getUnderlyingGrid() {
-        return grid;
     }
 
     private int generateMines(int rowSeed, int colSeed) {
@@ -74,6 +74,14 @@ final class Board {
         }
 
         return mineCount;
+    }
+
+    int getInitialRow() {
+        return initialRow;
+    }
+
+    int getInitialColumn() {
+        return initialColumn;
     }
 
     private void setNumbers() {

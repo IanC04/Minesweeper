@@ -7,6 +7,8 @@ package game.minesweeper.logic;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EnumSource;
 
 import java.util.Random;
 
@@ -18,37 +20,33 @@ public class TestBoard {
     private static final Random random = new Random();
 
     private Board testBoard;
-    private int[] initialCoordinates;
 
     @BeforeEach
     public void setupBoard() {
-        Difficulty d = Difficulty.BABY;
-        initialCoordinates = new int[]{random.nextInt(d.getDimensions()), random.nextInt(d.getDimensions())};
-        testBoard = new Board(d, initialCoordinates[0], initialCoordinates[1]);
+        testBoard = randomBoardWithDifficulty(Difficulty.BABY);
+    }
+
+    @ParameterizedTest
+    @EnumSource(Difficulty.class)
+    public void boardSizeEqualsDifficulty(Difficulty difficulty) {
+        testBoard = randomBoardWithDifficulty(difficulty);
+        assertEquals(testBoard.getSize(), testBoard.getLength() * testBoard.getLength());
     }
 
     @Test
-    public void boardIsSquare() {
-        byte[][] underlyingGrid = testBoard.getUnderlyingGrid();
+    public void initialSquareIsBlankWithNoMineNeighbors() {
+        assertFalse(testBoard.isNumber(testBoard.getInitialRow(), testBoard.getInitialColumn()));
 
-        for (byte[] row : underlyingGrid) {
-            assertEquals(row.length, underlyingGrid.length);
-        }
-    }
-
-    @Test
-    public void initialSquareIsBlank() {
-        byte[][] underlyingGrid = testBoard.getUnderlyingGrid();
-
-        for (int i = initialCoordinates[0] - 1; i <= initialCoordinates[0] + 1; i++) {
-            for (int j = initialCoordinates[1] - 1; j <= initialCoordinates[1] + 1; j++) {
+        for (int i = testBoard.getInitialRow() - 1; i <= testBoard.getInitialRow() + 1; i++) {
+            for (int j = testBoard.getInitialColumn() - 1; j <= testBoard.getInitialColumn() + 1; j++) {
                 if (testBoard.inBounds(i, j)) {
                     assertFalse(testBoard.isMine(i, j));
                 }
-                if (i == initialCoordinates[0] && j == initialCoordinates[1]) {
-                    assertEquals(0, underlyingGrid[i][j]);
-                }
             }
         }
+    }
+
+    private Board randomBoardWithDifficulty(Difficulty d) {
+        return new Board(d, random.nextInt(d.getDimensions()), random.nextInt(d.getDimensions()));
     }
 }

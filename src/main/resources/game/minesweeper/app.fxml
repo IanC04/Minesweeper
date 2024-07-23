@@ -10,7 +10,7 @@
     <top>
         <ToolBar>
             <Button onAction="#openRepository" text="View Repo"/>
-            <Button onAction="#getHint" text="Get Hint"/>
+            <Button fx:id="hint" text="Get Hint"/>
             <Pane HBox.hgrow="ALWAYS"/>
             <Label fx:id="timer" visible="false" text="5:00"/>
             <Pane HBox.hgrow="ALWAYS"/>

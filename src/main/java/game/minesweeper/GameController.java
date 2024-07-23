@@ -8,6 +8,8 @@ package game.minesweeper;
 import game.minesweeper.logic.Difficulty;
 import game.minesweeper.logic.GameManager;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -20,6 +22,9 @@ import java.text.MessageFormat;
 import java.util.List;
 
 public final class GameController {
+
+    private static final int TILE_SIZE = 25;
+
     @FXML
     private Label gameInfo;
     @FXML
@@ -28,9 +33,32 @@ public final class GameController {
     private final Difficulty difficulty;
     private final GameManager gameManager;
 
-    public GameController(Difficulty difficulty) {
+    private Node tileWasHighlight;
+
+    public GameController(Difficulty difficulty, Button hintButton) {
         this.difficulty = difficulty;
-        gameManager = new GameManager().newGame(difficulty);
+        this.gameManager = new GameManager().newGame(difficulty);
+        this.tileWasHighlight = null;
+
+        hintButton.setDisable(false);
+        hintButton.setOnAction(event -> getHint());
+    }
+
+    private void getHint() {
+        resetHighlightedTile();
+
+        GameManager.Cell cellToHighlight = gameManager.getHint();
+        if (cellToHighlight != null) {
+            Node tileToHighlight = getBoardNode(cellToHighlight.r(), cellToHighlight.c());
+            tileToHighlight.setOpacity(0.5);
+            tileWasHighlight = tileToHighlight;
+        }
+    }
+
+    private void resetHighlightedTile() {
+        if (tileWasHighlight != null) {
+            tileWasHighlight.setOpacity(1);
+        }
     }
 
     @FXML
@@ -39,17 +67,16 @@ public final class GameController {
 
         for (int r = 0; r < difficulty.getDimensions(); r++) {
             for (int c = 0; c < difficulty.getDimensions(); c++) {
-                final Rectangle rectangle = new Rectangle(25, 25);
+                final Rectangle rectangle = new Rectangle(TILE_SIZE, TILE_SIZE, Color.BURLYWOOD);
                 rectangle.setMouseTransparent(true);
-                rectangle.setFill(Color.BURLYWOOD);
                 rectangle.setStroke(Color.BLACK);
                 rectangle.setArcWidth(5);
                 rectangle.setArcHeight(5);
 
                 final ImageView imageView = new ImageView();
                 imageView.setMouseTransparent(true);
-                imageView.setFitWidth(25);
-                imageView.setFitHeight(25);
+                imageView.setFitWidth(TILE_SIZE);
+                imageView.setFitHeight(TILE_SIZE);
                 imageView.imageProperty().bind(gameManager.createDisplayBinding(r, c));
 
                 final StackPane tile = new StackPane(rectangle, imageView);
@@ -62,11 +89,12 @@ public final class GameController {
     }
 
     void clickTile(MouseEvent event, int r, int c) {
+        resetHighlightedTile();
+
         switch (event.getButton()) {
             case PRIMARY -> {
                 List<GameManager.Cell> cellsTurnedShown = gameManager.move(r, c);
-                cellsTurnedShown.forEach(cell -> boardPane.getChildrenUnmodifiable().get(
-                        cell.r() * difficulty.getDimensions() + cell.c()).setMouseTransparent(true));
+                cellsTurnedShown.forEach(cell -> getBoardNode(cell.r(), cell.c()).setMouseTransparent(true));
             }
             case SECONDARY -> gameManager.flag(r, c);
         }
@@ -76,6 +104,7 @@ public final class GameController {
             if (gameManager.gameWon()) {
                 gameInfo.setText(Messages.getMessage(Messages.GAME_OVER_WIN));
             } else {
+                assert gameManager.gameLost();
                 gameInfo.setText(Messages.getMessage(Messages.GAME_OVER_LOST));
             }
         } else {
@@ -86,5 +115,9 @@ public final class GameController {
                         gameManager.getClickCount()));
             }
         }
+    }
+
+    private Node getBoardNode(int r, int c) {
+        return boardPane.getChildrenUnmodifiable().get(r * difficulty.getDimensions() + c);
     }
 }
