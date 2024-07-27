@@ -13,6 +13,8 @@ public final class Messages {
     private static final ResourceBundle RESOURCE_BUNDLE = ResourceBundle.getBundle(FILE_PATH);
 
     public static final String MINESWEEPER = "MINESWEEPER";
+    public static final String WELCOME_TO_MINESWEEPER = "WELCOME_TO_MINESWEEPER";
+    public static final String UNABLE_TO_LOAD = "UNABLE_TO_LOAD";
     public static final String GAME_OVER_WIN = "GAME_OVER_WIN";
     public static final String GAME_OVER_LOST = "GAME_OVER_LOST";
     public static final String CONTINUE = "CONTINUE";

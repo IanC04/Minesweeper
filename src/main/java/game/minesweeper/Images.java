@@ -22,31 +22,27 @@ public enum Images {
     private final String text;
     private final Image image;
 
-    public static final Map<String, Images> IMAGE_MAP;
+    public static final Map<String, Images> IMAGE_MAP = Map.of(
+            "0", ZERO,
+            "1", ONE,
+            "2", TWO,
+            "3", THREE,
+            "4", FOUR,
+            "5", FIVE,
+            "6", SIX,
+            "7", SEVEN,
+            "8", EIGHT);
 
-    static {
-        IMAGE_MAP = Map.of(
-                "0", ZERO,
-                "1", ONE,
-                "2", TWO,
-                "3", THREE,
-                "4", FOUR,
-                "5", FIVE,
-                "6", SIX,
-                "7", SEVEN,
-                "8", EIGHT);
-    }
-
-    public String getText() {
-        return text;
+    Images(String path, String symbol) {
+        image = new Image(Objects.requireNonNull(Application.class.getResourceAsStream(path)));
+        text = symbol;
     }
 
     public Image getImage() {
         return image;
     }
 
-    Images(String path, String symbol) {
-        text = symbol;
-        image = new Image(Objects.requireNonNull(Application.class.getResourceAsStream(path)));
+    public String getText() {
+        return text;
     }
 }

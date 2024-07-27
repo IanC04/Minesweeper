@@ -32,16 +32,28 @@ public final class GameController {
 
     private final Difficulty difficulty;
     private final GameManager gameManager;
+    private final Timer timer;
+    private final boolean useTimer;
 
     private Node tileWasHighlight;
 
-    public GameController(Difficulty difficulty, Button hintButton) {
+    public GameController(Difficulty difficulty, Button hintButton, Timer timer, boolean useTimer) {
         this.difficulty = difficulty;
         this.gameManager = new GameManager().newGame(difficulty);
         this.tileWasHighlight = null;
+        this.timer = timer.setDifficulty(difficulty);
+        this.useTimer = useTimer;
 
         hintButton.setDisable(false);
         hintButton.setOnAction(event -> getHint());
+
+        if (useTimer) {
+            timer.getTimeEnded().addListener((__, oldValue, newValue) -> {
+                if (newValue) {
+                    manageGameOver();
+                }
+            });
+        }
     }
 
     private void getHint() {
@@ -95,25 +107,36 @@ public final class GameController {
             case PRIMARY -> {
                 List<GameManager.Cell> cellsTurnedShown = gameManager.move(r, c);
                 cellsTurnedShown.forEach(cell -> getBoardNode(cell.r(), cell.c()).setMouseTransparent(true));
+
+                if (useTimer && gameManager.afterFirstClick()) {
+                    timer.startTimer();
+                }
             }
             case SECONDARY -> gameManager.flag(r, c);
         }
 
         if (gameManager.gameOver()) {
-            boardPane.setMouseTransparent(true);
-            if (gameManager.gameWon()) {
-                gameInfo.setText(Messages.getMessage(Messages.GAME_OVER_WIN));
-            } else {
-                assert gameManager.gameLost();
-                gameInfo.setText(Messages.getMessage(Messages.GAME_OVER_LOST));
-            }
+            manageGameOver();
         } else {
-            if (gameManager.wasFirstClick()) {
-                gameInfo.setText(Messages.getMessage(Messages.START));
-            } else {
-                gameInfo.setText(MessageFormat.format(Messages.getMessage(Messages.CONTINUE),
-                        gameManager.getClickCount()));
-            }
+            manageGameContinue();
+        }
+    }
+
+    private void manageGameOver() {
+        boardPane.setMouseTransparent(true);
+        if (gameManager.gameWon()) {
+            gameInfo.setText(Messages.getMessage(Messages.GAME_OVER_WIN));
+        } else {
+            gameInfo.setText(Messages.getMessage(Messages.GAME_OVER_LOST));
+        }
+    }
+
+    private void manageGameContinue() {
+        if (gameManager.afterFirstClick()) {
+            gameInfo.setText(Messages.getMessage(Messages.START));
+        } else {
+            gameInfo.setText(MessageFormat.format(Messages.getMessage(Messages.CONTINUE),
+                    gameManager.getClickCount()));
         }
     }
 

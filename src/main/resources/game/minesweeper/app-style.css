@@ -1,18 +1,3 @@
-/*
-.root {
-    -fx-background-color: gray;
-    !*-fx-background-image: url("background.gif");*!
-}
-
-.label {
-    -fx-background-color: green;
-}
-
-.button {
-    -fx-background-color: green;
-}
-*/
-
 #timerControl {
     -fx-background-color: #cc0000;
 }

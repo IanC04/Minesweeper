@@ -6,13 +6,14 @@
 package game.minesweeper.logic;
 
 public enum Difficulty {
-    BABY(5, 15), EASY(10, 20), MEDIUM(15, 25), HARD(20, 30), INSANE(25, 35);
+    BABY(5, 15, 1), EASY(10, 20, 2), MEDIUM(15, 25, 5), HARD(20, 30, 10), INSANE(25, 35, 10);
 
-    private final int dimensions, mineRateOutOf100;
+    private final int dimensions, mineRateOutOf100, minutesNeeded;
 
-    Difficulty(int d, int p) {
+    Difficulty(int d, int p, int m) {
         this.dimensions = d;
         this.mineRateOutOf100 = p;
+        this.minutesNeeded = m;
     }
 
     public int getDimensions() {
@@ -21,6 +22,10 @@ public enum Difficulty {
 
     public int getMineRateOutOf100() {
         return mineRateOutOf100;
+    }
+
+    public int getMinutesNeeded() {
+        return minutesNeeded;
     }
 
     @Override

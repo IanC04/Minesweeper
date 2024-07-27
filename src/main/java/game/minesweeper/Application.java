@@ -14,6 +14,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 public final class Application extends javafx.application.Application {
+
     @Override
     public void start(Stage stage) throws IOException {
         final Rectangle2D screenSize = Screen.getPrimary().getVisualBounds();

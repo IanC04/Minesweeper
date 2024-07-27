@@ -55,7 +55,7 @@ public final class GameManager {
     }
 
     public List<Cell> move(final int row, final int col) {
-        if (wasFirstClick()) {
+        if (beforeFirstClick()) {
             currentGame.setupBoard(row, col);
         }
 
@@ -83,8 +83,12 @@ public final class GameManager {
         cellProperty.set(image);
     }
 
-    public boolean wasFirstClick() {
+    public boolean beforeFirstClick() {
         return currentGame.getClickCount() == 0;
+    }
+
+    public boolean afterFirstClick() {
+        return currentGame.getClickCount() == 1;
     }
 
     public boolean gameOver() {
@@ -96,16 +100,12 @@ public final class GameManager {
         return currentGame.getCurrentState().equals(GameState.State.GAME_OVER_WIN);
     }
 
-    public boolean gameLost() {
-        return currentGame.getCurrentState().equals(GameState.State.GAME_OVER_LOSS);
-    }
-
     public int getClickCount() {
         return currentGame.getClickCount();
     }
 
     public Cell getHint() {
-        if (wasFirstClick() || gameOver()) {
+        if (beforeFirstClick() || gameOver()) {
             return null;
         }
 

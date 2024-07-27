@@ -12,10 +12,10 @@
             <Button onAction="#openRepository" text="View Repo"/>
             <Button fx:id="hint" text="Get Hint"/>
             <Pane HBox.hgrow="ALWAYS"/>
-            <Label fx:id="timer" visible="false" text="5:00"/>
+            <Label fx:id="timerLabel" visible="false"/>
             <Pane HBox.hgrow="ALWAYS"/>
             <ToggleButton fx:id="timerControl" text="Timer" textFill="azure"/>
-            <Button text="Settings" onAction="#changeSettings"/>
+            <Button text="Settings" onAction="#changeSettings" disable="true"/>
         </ToolBar>
     </top>
     <center>

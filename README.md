@@ -1,15 +1,25 @@
 Applying some of the concepts I learned during my internship 🫡
 ### Key Takeaways
+- Java
+  - Functional Interfaces
+  - Lambda Expressions & Method References
 - Testing
   - Unit
+  - Component
   - Integration
   - Peer/Manual
+  - Mocking
 - Design Patterns
-- De-Coupling
+  - Creational
+  - Structural
+  - Behavioral
+  - De-Coupling
 - Build Automation (Gradle)
 - JavaFX
   - Event Handling
   - Value Binding
+  - Listeners
+  - FXML
 - Version Control
   - Gerrit & Jenkins
   - GitHub
