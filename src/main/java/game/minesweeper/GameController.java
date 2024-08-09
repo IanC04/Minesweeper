@@ -11,6 +11,7 @@ import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.effect.Bloom;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
@@ -24,6 +25,8 @@ import java.util.List;
 public final class GameController {
 
     private static final int TILE_SIZE = 25;
+    private static final Bloom EFFECT = new Bloom();
+    private static final double HOVER_OPACITY = 0.8;
 
     @FXML
     private Label gameInfo;
@@ -62,14 +65,14 @@ public final class GameController {
         GameManager.Cell cellToHighlight = gameManager.getHint();
         if (cellToHighlight != null) {
             Node tileToHighlight = getBoardNode(cellToHighlight.r(), cellToHighlight.c());
-            tileToHighlight.setOpacity(0.5);
+            tileToHighlight.setEffect(EFFECT);
             tileWasHighlight = tileToHighlight;
         }
     }
 
     private void resetHighlightedTile() {
         if (tileWasHighlight != null) {
-            tileWasHighlight.setOpacity(1);
+            tileWasHighlight.setEffect(null);
         }
     }
 
@@ -93,6 +96,7 @@ public final class GameController {
 
                 final StackPane tile = new StackPane(rectangle, imageView);
                 final int finalR = r, finalC = c;
+                tile.opacityProperty().bind(tile.hoverProperty().map(x -> x ? HOVER_OPACITY : 1));
                 tile.setOnMouseClicked(event -> clickTile(event, finalR, finalC));
                 // GridPane is column then row index
                 boardPane.add(tile, c, r);
